@@ -2,14 +2,13 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models/mongodb');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
 const collectionName = db.state.collection;
 
 // CORS
-// router.use(function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     next();
-// });
+router.use(cors());
+router.options('*', cors());
 
 router.use(bodyParser.urlencoded({
     extended: true

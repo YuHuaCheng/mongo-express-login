@@ -1,17 +1,16 @@
 const express = require('express');
 const app = express();
 const db = require('./models/mongodb');
-const dbUrl = 'mongodb://localhost:27017/auth';
-const cors = require('cors');
+
+// In docker-compose.yml it will look up the pre-defined environment variable instead
+const MONGODB_HOST = process.env.MONGODB_HOST ? process.env.MONGODB_HOST : 'localhost';
+const dbUrl = `mongodb://${MONGODB_HOST}:27017/auth`;
 
 // Routes
 app.use('/login', require('./controllers/get-user'));
 app.use('/create', require('./controllers/create-user'));
 app.use('/update', require('./controllers/update-pwd'));
 
-// CORS
-app.use(cors());
-app.options('*', cors());
 
 // Connect to Mongo on start
 db.connect(dbUrl, function(err) {
