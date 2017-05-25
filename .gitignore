@@ -4,4 +4,4 @@
 out
 gen
 
-server/search_debug.js
+node_modules/*
