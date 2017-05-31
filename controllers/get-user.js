@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models/mongodb');
 const hashPassword = require('../models/salt_hash_password');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const collectionName = db.state.collection;
@@ -13,6 +14,10 @@ const getSaltHash = hashPassword.sha512;
 router.use(cors());
 router.options('*', cors());
 
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 router.get('/all_users', function(req, res) {
     const collection = db.get().collection(collectionName);
@@ -24,10 +29,10 @@ router.get('/all_users', function(req, res) {
 
 module.exports = router;
 
-router.get('/find_user/:user_id/:password', function(req, res) {
+router.post('/find_user', function(req, res) {
     const collection = db.get().collection(collectionName);
-    const userId = req.params.user_id;
-    const password = req.params.password;
+    const userId = req.body[ID];
+    const password = req.body[PASSWORD];
     const noMatch = function(res){
         return res.send({
             success: false,
